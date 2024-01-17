@@ -1,6 +1,5 @@
 package kr.ac.kumoh.ce.prof01.jet08navigation
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -20,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -48,6 +46,7 @@ enum class Screen {
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
+    val argLecture = "lecture"
 
     Jet08NavigationTheme {
         Surface(
@@ -64,14 +63,14 @@ fun MainScreen() {
                     }
                 }
                 composable(
-                    route = "${Screen.Lecture.name}/{lecture}",
+                    route = "${Screen.Lecture.name}/{$argLecture}",
                     arguments = listOf(
-                        navArgument("lecture") {
+                        navArgument(argLecture) {
                             type = NavType.StringType
                         }
                     )
                 ) {
-                    LectureScreen(it.arguments?.getString("lecture"))
+                    LectureScreen(it.arguments?.getString(argLecture))
                 }
             }
         }
@@ -121,6 +120,7 @@ fun LectureScreen(lecture: String?) {
         factory =  {
             WebView(it).apply {
                 webViewClient = WebViewClient()
+                // NOTE: 보안 주의
                 settings.javaScriptEnabled = true
                 loadUrl(lectureUrl)
             }
